@@ -7,5 +7,5 @@ type User struct {
 	Username string `gorm:"unique"`
 	Email    string `gorm:"unique"`
 	Password string
-	Tweets   []Tweet
+	Tweets   []Tweet `gorm:"foreignKey:UserID"`
 }
