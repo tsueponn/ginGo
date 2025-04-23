@@ -1,42 +1,34 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var DB *sql.DB
+var DB *gorm.DB
 
 func InitDB() {
-	// Load environment variables from the specified path
+	// Load environment variables
 	err := godotenv.Load("/Users/tsueshima/GolandProjects/twitterc/.env")
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	// Build the connection string
 	user := os.Getenv("POSTGRES_USER")
 	password := os.Getenv("POSTGRES_PASSWORD")
 	dbname := os.Getenv("POSTGRES_DB")
 
-	connStr := fmt.Sprintf("postgres://%s:%s@localhost:3000/%s?sslmode=disable", user, password, dbname)
+	dsn := fmt.Sprintf("host=localhost user=%s password=%s dbname=%s port=3000 sslmode=disable", user, password, dbname)
 
-	// Open the database connection
-	DB, err = sql.Open("postgres", connStr)
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Error opening DB connection: %v", err)
+		log.Fatalf("Error connecting to DB: %v", err)
 	}
 
-	// Test the connection
-	err = DB.Ping()
-	if err != nil {
-		log.Fatalf("Cannot connect to DB: %v", err)
-	}
-
-	fmt.Println("✅ Connected to PostgreSQL database successfully.")
+	log.Println("✅ Connected to PostgreSQL database successfully.")
 }
