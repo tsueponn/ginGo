@@ -47,17 +47,9 @@ func main() {
 
 	fmt.Println("✅ Connected to DB and models migrated")
 
-	// Setup Gin server
 	r := gin.Default()
 
 	routes.SetupRoutes(r, db)
-	// Auth routes
-	//r.POST("/register", authHandler.Register)
-	//r.POST("/login", authHandler.Login)
-	//
-	//// Tweet routes
-	//r.POST("/tweets", tweetHandler.CreateTweet)
-	//r.GET("/tweets", tweetHandler.ListTweets)
 
 	// Start server
 	err = r.Run(":8080")

@@ -9,9 +9,17 @@ import (
 )
 
 func SetupRoutes(r *gin.Engine, db *gorm.DB) {
-	ur := repository.NewUserRepository(db)
-	as := service.NewAuthService(ur)
-	ah := delivery.NewAuthHandler(as)
+	// Auth
+	userRepo := repository.NewUserRepository(db)
+	authService := service.NewAuthService(userRepo)
+	authHandler := delivery.NewAuthHandler(authService)
 
-	RegisterAuthRoutes(r, ah)
+	// Tweets
+	tweetRepo := repository.NewTweetRepository(db)
+	tweetService := service.NewTweetService(tweetRepo)
+	tweetHandler := delivery.NewTweetHandler(tweetService)
+
+	// Register routes
+	RegisterAuthRoutes(r, authHandler)
+	RegisterTweetRoutes(r, tweetHandler)
 }
