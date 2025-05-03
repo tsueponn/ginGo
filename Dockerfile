@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . .
 
-# 👇 If your main.go is inside cmd/, adjust the path accordingly
+# 👇 Если main.go в cmd/server, оставьте так
 RUN go build -o main ./cmd/server
 
 # Stage 2: Run
@@ -17,6 +17,7 @@ FROM debian:bookworm-slim
 WORKDIR /app
 
 COPY --from=builder /app/main .
+COPY --from=builder /app/migrations ./migrations
 
 EXPOSE 8080
 
