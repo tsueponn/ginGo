@@ -2,25 +2,30 @@ package db
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func InitDB() (*gorm.DB, error) {
-	// Load environment variables
-	err := godotenv.Load("/Users/tsueshima/GolandProjects/twitterc/.env")
-	if err != nil {
-		return nil, fmt.Errorf("error loading .env file: %w", err)
+	// Viper reads environment variables automatically
+	viper.AutomaticEnv()
+
+	user := viper.GetString("POSTGRES_USER")
+	password := viper.GetString("POSTGRES_PASSWORD")
+	dbname := viper.GetString("POSTGRES_DB")
+	dbhost := viper.GetString("POSTGRES_HOST")
+	dbport := viper.GetString("POSTGRES_PORT")
+
+	if dbport == "" {
+		dbport = "3000" // fallback port if not set
 	}
 
-	user := os.Getenv("POSTGRES_USER")
-	password := os.Getenv("POSTGRES_PASSWORD")
-	dbname := os.Getenv("POSTGRES_DB")
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		dbhost, user, password, dbname, dbport)
 
-	dsn := fmt.Sprintf("host=localhost user=%s password=%s dbname=%s port=3000 sslmode=disable", user, password, dbname)
+	println(dsn)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
