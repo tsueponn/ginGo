@@ -33,6 +33,7 @@ func (s *AuthService) Register(name, email, password string) (*models.User, erro
 		Username: name,
 		Email:    email,
 		Password: string(hashedPassword),
+		Role:     models.RoleUser,
 	}
 
 	err = s.UserRepo.CreateUser(user)
@@ -59,6 +60,7 @@ func (s *AuthService) Login(email, password string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
 		"exp":     time.Now().Add(time.Hour * 72).Unix(), // token expires in 72h
+		"role":    user.Role,
 	})
 
 	tokenString, err := token.SignedString(jwtSecretKey)

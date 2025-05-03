@@ -18,6 +18,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to DB: %v", err)
 	}
+
 	// Auto-migrate your models
 	err = database.AutoMigrate(&models.User{}, &models.Tweet{})
 	if err != nil {
