@@ -10,7 +10,7 @@ import (
 
 func AdminMiddleware(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userID := c.GetHeader("userID")
+		userID, _ := c.Get("userID")
 		if userID == "" {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return

@@ -9,7 +9,7 @@ RUN go mod download
 COPY . .
 
 # 👇 Если main.go в cmd/server, оставьте так
-RUN go build -o main ./cmd/server
+RUN go build -o main ./cmd/server 
 
 # Stage 2: Run
 FROM debian:bookworm-slim

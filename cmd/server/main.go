@@ -18,6 +18,11 @@ func main() {
 		log.Fatalf("❌ Failed to connect to DB: %v", err)
 	}
 
+	// Auto-migrate your models
+	//err = database.AutoMigrate(&models.User{}, &models.Tweet{})
+	//if err != nil {
+	//	log.Fatalf("❌ Auto migration failed: %v", err)
+
 	db.RunMigrationsUp()
 
 	fmt.Println("✅ Connected to DB and models migrated")

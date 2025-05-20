@@ -21,5 +21,6 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 	// Register routes
 	RegisterAuthRoutes(r, authHandler)
-	RegisterTweetRoutes(r, tweetHandler)
+	RegisterTweetRoutes(r, tweetHandler, db) // <--- передаём db
+	RegisterAdminRoutes(r, db)
 }
